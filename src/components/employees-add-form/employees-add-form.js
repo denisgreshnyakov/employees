@@ -8,6 +8,8 @@ class EmployeesAddForm extends Component {
     this.state = {
       name: "",
       salary: "",
+      errorName: false,
+      errorSalary: false,
     };
   }
 
@@ -20,15 +22,40 @@ class EmployeesAddForm extends Component {
   onSubmit = (e) => {
     e.preventDefault();
     const { name, salary } = this.state;
+
+    if (name.length < 3) {
+      this.setState(() => {
+        return {
+          errorName: true,
+          name: "",
+          salary: "",
+        };
+      });
+      return;
+    }
+
+    if (salary === "") {
+      this.setState(() => {
+        return {
+          errorSalary: true,
+          name: "",
+          salary: "",
+        };
+      });
+      return;
+    }
+
     this.props.onAdd(name, salary);
     this.setState({
       name: "",
       salary: "",
+      errorName: false,
+      errorSalary: false,
     });
   };
 
   render() {
-    const { name, salary } = this.state;
+    const { name, salary, errorName, errorSalary } = this.state;
 
     return (
       <div className="app-add-form">
@@ -41,6 +68,7 @@ class EmployeesAddForm extends Component {
             name="name"
             value={name}
             onChange={this.onValueChange}
+            style={errorName ? { borderColor: "red" } : { border: "none" }}
           />
           <input
             type="number"
@@ -49,6 +77,7 @@ class EmployeesAddForm extends Component {
             name="salary"
             value={salary}
             onChange={this.onValueChange}
+            style={errorSalary ? { borderColor: "red" } : { border: "none" }}
           />
 
           <button type="submit" className="btn btn-outline-light">
